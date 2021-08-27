@@ -17,19 +17,6 @@ import {
 	__experimentalBatch,
 } from '../actions';
 
-jest.mock( '../locks/actions', () => ( {
-	__unstableAcquireStoreLock: jest.fn( () => [
-		{
-			type: 'MOCKED_ACQUIRE_LOCK',
-		},
-	] ),
-	__unstableReleaseStoreLock: jest.fn( () => [
-		{
-			type: 'MOCKED_RELEASE_LOCK',
-		},
-	] ),
-} ) );
-
 jest.mock( '../batch', () => {
 	const { createBatch } = jest.requireActual( '../batch' );
 	return {
@@ -72,7 +59,7 @@ describe( 'deleteEntityRecord', () => {
 
 		// Acquire lock
 		expect( fulfillment.next( entities ).value.type ).toBe(
-			'MOCKED_ACQUIRE_LOCK'
+			'@@data/DISPATCH'
 		);
 
 		// Start
@@ -94,9 +81,7 @@ describe( 'deleteEntityRecord', () => {
 		);
 
 		// Release lock
-		expect( fulfillment.next().value.type ).toEqual(
-			'MOCKED_RELEASE_LOCK'
-		);
+		expect( fulfillment.next().value.type ).toEqual( '@@data/DISPATCH' );
 
 		expect( fulfillment.next() ).toMatchObject( {
 			done: true,
@@ -117,7 +102,7 @@ describe( 'saveEntityRecord', () => {
 
 		// Provide entities and acquire lock
 		expect( fulfillment.next( entities ).value.type ).toBe(
-			'MOCKED_ACQUIRE_LOCK'
+			'@@data/DISPATCH'
 		);
 
 		// Trigger apiFetch
@@ -149,9 +134,7 @@ describe( 'saveEntityRecord', () => {
 			'SAVE_ENTITY_RECORD_FINISH'
 		);
 		// Release lock
-		expect( fulfillment.next().value.type ).toEqual(
-			'MOCKED_RELEASE_LOCK'
-		);
+		expect( fulfillment.next().value.type ).toEqual( '@@data/DISPATCH' );
 
 		expect( fulfillment.next().value ).toBe( updatedRecord );
 	} );
@@ -167,7 +150,7 @@ describe( 'saveEntityRecord', () => {
 
 		// Provide entities and acquire lock
 		expect( fulfillment.next( entities ).value.type ).toBe(
-			'MOCKED_ACQUIRE_LOCK'
+			'@@data/DISPATCH'
 		);
 
 		// Trigger apiFetch
@@ -193,9 +176,7 @@ describe( 'saveEntityRecord', () => {
 			'SAVE_ENTITY_RECORD_FINISH'
 		);
 		// Release lock
-		expect( fulfillment.next().value.type ).toEqual(
-			'MOCKED_RELEASE_LOCK'
-		);
+		expect( fulfillment.next().value.type ).toEqual( '@@data/DISPATCH' );
 	} );
 
 	it( 'triggers a PUT request for an existing record with a custom key', async () => {
@@ -214,7 +195,7 @@ describe( 'saveEntityRecord', () => {
 
 		// Provide entities and acquire lock
 		expect( fulfillment.next( entities ).value.type ).toBe(
-			'MOCKED_ACQUIRE_LOCK'
+			'@@data/DISPATCH'
 		);
 
 		// Trigger apiFetch
@@ -244,9 +225,7 @@ describe( 'saveEntityRecord', () => {
 			'SAVE_ENTITY_RECORD_FINISH'
 		);
 		// Release lock
-		expect( fulfillment.next().value.type ).toEqual(
-			'MOCKED_RELEASE_LOCK'
-		);
+		expect( fulfillment.next().value.type ).toEqual( '@@data/DISPATCH' );
 	} );
 } );
 
